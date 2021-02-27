@@ -236,25 +236,34 @@ public class SonarFacade {
 
         String projectKey = reportTaskProps.getProperty("projectKey");
         String refName = gitLabPluginConfiguration.refName();
+        String mergeRequestIid = String.valueOf(gitLabPluginConfiguration.mergeRequestIid());
         int page = 1;
         Integer nbPage = null;
 
         List<Issue> issues = new ArrayList<>();
         while (nbPage == null || page <= nbPage) {
-            Issues.SearchWsResponse searchWsResponse = searchIssues(projectKey, refName, page);
+            Issues.SearchWsResponse searchWsResponse = searchIssues(projectKey, refName, mergeRequestIid, page);
             nbPage = computeNbPage(searchWsResponse.getTotal(), searchWsResponse.getPs());
-            issues.addAll(toIssues(searchWsResponse, refName));
+            issues.addAll(toIssues(searchWsResponse, refName, mergeRequestIid));
 
             page++;
         }
         return issues;
     }
 
-    private Issues.SearchWsResponse searchIssues(String componentKey, String branch, int page) {
-        SearchRequest searchRequest = new SearchRequest().setComponentKeys(Collections.singletonList(componentKey)).setP(String.valueOf(page)).setResolved("false");
-        if (isNotBlankAndNotEmpty(branch)) {
+    private Issues.SearchWsResponse searchIssues(String componentKey, String branch, String mergeRequestIid, int page) {
+        SearchRequest searchRequest = new SearchRequest()
+                .setComponentKeys(Collections.singletonList(componentKey))
+                .setP(String.valueOf(page))
+                .setResolved("false");
+
+        if (!mergeRequestIid.equals("-1")) {
+            searchRequest.setPullRequest(mergeRequestIid);
+        }
+        else if (isNotBlankAndNotEmpty(branch)) {
             searchRequest.setBranch(branch);
         }
+
         return wsClient.issues().search(searchRequest);
     }
 
@@ -273,7 +282,7 @@ public class SonarFacade {
         return Math.min(nbPage, maxPage);
     }
 
-    private List<Issue> toIssues(Issues.SearchWsResponse issuesSearchWsResponse, String branch) {
+    private List<Issue> toIssues(Issues.SearchWsResponse issuesSearchWsResponse, String branch, String mergeRequestIid) {
         List<Issues.Issue> issues = issuesSearchWsResponse.getIssuesList();
         if (issues == null) {
             return Collections.emptyList();
@@ -294,7 +303,7 @@ public class SonarFacade {
             if (componentOptional.isPresent()) {
                 Issues.Component component = componentOptional.get();
                 try {
-                    file = componentCache.get(component.getKey(), () -> toFile(componentOptional.get(), branch));
+                    file = componentCache.get(component.getKey(), () -> toFile(componentOptional.get(), branch, mergeRequestIid));
                 } catch (Exception e) {
                     throw new IllegalStateException("Failed to get component file for " + component.getKey(), e);
                 }
@@ -304,9 +313,11 @@ public class SonarFacade {
         return res;
     }
 
-    private File toFile(Issues.Component component, String branch) {
+    private File toFile(Issues.Component component, String branch, String mergeRequestIid) {
         ShowRequest showRequest = new ShowRequest().setComponent(component.getKey());
-        if (isNotBlankAndNotEmpty(branch)) {
+        if (!mergeRequestIid.equals("-1")) {
+            showRequest.setPullRequest(mergeRequestIid);
+        } else if (isNotBlankAndNotEmpty(branch)) {
             showRequest.setBranch(branch);
         }
 
