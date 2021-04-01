@@ -31,7 +31,7 @@ public enum QualityGateFailMode {
 
     public static QualityGateFailMode of(String meaning) {
         for (QualityGateFailMode m : values()) {
-            if (m.meaning.equals(meaning)) {
+            if (m.meaning.equalsIgnoreCase(meaning)) {
                 return m;
             }
         }
