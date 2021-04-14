@@ -26,6 +26,8 @@ import com.talanlabs.gitlab.api.v4.models.projects.GitLabProject;
 import com.talanlabs.gitlab.api.v4.services.GitLabAPICommits;
 import com.talanlabs.gitlab.api.v4.services.GitLabAPIMergeRequestDiff;
 import com.talanlabs.gitlab.api.v4.services.GitLabAPIMergeRequestDiscussion;
+import com.talanlabs.sonar.plugins.gitlab.api.GitLabAPIMergeRequestDiscussionExt;
+
 import org.junit.Test;
 import org.mockito.Matchers;
 
@@ -231,7 +233,12 @@ public class GitLabApiV4WrapperTest {
         GitLabProject gitLabProject = mock(GitLabProject.class);
         when(gitLabProject.getId()).thenReturn(projectId);
         facade.setGitLabProject(gitLabProject);
-
+        
+        GitLabAPIMergeRequestDiscussionExt gitLabAPIExt = mock(GitLabAPIMergeRequestDiscussionExt.class);
+        facade.setGitLabAPIExt(gitLabAPIExt);
+              
+        when(gitLabAPIExt.hasDiscussion(anyInt(), anyInt(), anyString(), anyInt(), anyString(), anyString(), anyString())).thenReturn(false);
+        
         GitLabAPIMergeRequestDiscussion mergeRequestDiscussion = mock(GitLabAPIMergeRequestDiscussion.class);
         when(gitLabAPI.getGitLabAPIMergeRequestDiscussion()).thenReturn(mergeRequestDiscussion);
 

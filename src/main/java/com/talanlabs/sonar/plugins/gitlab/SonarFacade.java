@@ -236,12 +236,13 @@ public class SonarFacade {
 
         String projectKey = reportTaskProps.getProperty("projectKey");
         String refName = gitLabPluginConfiguration.refName();
+        int pullRequestKey = gitLabPluginConfiguration.pullRequestKey();
         int page = 1;
         Integer nbPage = null;
 
         List<Issue> issues = new ArrayList<>();
         while (nbPage == null || page <= nbPage) {
-            Issues.SearchWsResponse searchWsResponse = searchIssues(projectKey, refName, page);
+            Issues.SearchWsResponse searchWsResponse = searchIssues(projectKey, pullRequestKey, refName, page);
             nbPage = computeNbPage(searchWsResponse.getTotal(), searchWsResponse.getPs());
             issues.addAll(toIssues(searchWsResponse, refName));
 
@@ -250,9 +251,12 @@ public class SonarFacade {
         return issues;
     }
 
-    private Issues.SearchWsResponse searchIssues(String componentKey, String branch, int page) {
+    private Issues.SearchWsResponse searchIssues(String componentKey, int pullRequestKey, String branch, int page) {
         SearchRequest searchRequest = new SearchRequest().setComponentKeys(Collections.singletonList(componentKey)).setP(String.valueOf(page)).setResolved("false");
-        if (isNotBlankAndNotEmpty(branch)) {
+        if (pullRequestKey != -1) {
+        	searchRequest.setPullRequest(String.format("%d", pullRequestKey));
+        }
+        else if (isNotBlankAndNotEmpty(branch)) {
             searchRequest.setBranch(branch);
         }
         return wsClient.issues().search(searchRequest);

@@ -28,8 +28,11 @@ import com.talanlabs.gitlab.api.v4.models.commits.GitLabCommit;
 import com.talanlabs.gitlab.api.v4.models.commits.GitLabCommitComments;
 import com.talanlabs.gitlab.api.v4.models.commits.GitLabCommitDiff;
 import com.talanlabs.gitlab.api.v4.models.discussion.GitlabDiscussion;
+import com.talanlabs.gitlab.api.v4.models.discussion.GitlabDiscussionStatus;
 import com.talanlabs.gitlab.api.v4.models.projects.GitLabProject;
 import com.talanlabs.gitlab.api.v4.models.users.GitLabUser;
+import com.talanlabs.sonar.plugins.gitlab.api.GitLabAPIMergeRequestDiscussionExt;
+
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -51,6 +54,8 @@ public class GitLabApiV4Wrapper implements IGitLabApiWrapper {
     private final GitLabPluginConfiguration config;
     private GitLabAPI gitLabAPIV4;
     private GitLabProject gitLabProject;
+    private GitLabAPIMergeRequestDiscussionExt gitLabAPIExt;
+    
     private Map<String, List<GitLabCommitComments>> commitCommentPerRevision;
     private Map<String, Map<String, Set<Line>>> patchPositionByFile;
 
@@ -77,6 +82,11 @@ public class GitLabApiV4Wrapper implements IGitLabApiWrapper {
     void setGitLabAPI(GitLabAPI gitLabAPI) {
         this.gitLabAPIV4 = gitLabAPI;
     }
+    
+    void setGitLabAPIExt(GitLabAPIMergeRequestDiscussionExt gitLabAPIExt) {
+        this.gitLabAPIExt = gitLabAPIExt;
+    }
+
 
     private GitLabProject getGitLabProject() throws IOException {
         if (config.projectId() == null) {
@@ -295,7 +305,14 @@ public class GitLabApiV4Wrapper implements IGitLabApiWrapper {
         checkArgument(mergeRequestDiffs.getResults() != null && !mergeRequestDiffs.getResults().isEmpty(), "There are no merge request diffs.");
 
         GitlabMergeRequestDiff mergeRequestDiff = mergeRequestDiffs.getResults().get(0);
-
+       
+        gitLabAPIExt = gitLabAPIExt == null ? new GitLabAPIMergeRequestDiscussionExt(gitLabAPIV4): gitLabAPIExt;
+        
+        if(gitLabAPIExt.hasDiscussion(projectId, mergeRequestIid, fullPath, lineNumber, body, mergeRequestDiff.getBaseCommitSha(), mergeRequestDiff.getHeadCommitSha())) {
+        	LOG.debug("discussion already exist");
+        	return;
+        }
+        LOG.debug("creating new discussion.");
         GitlabDiscussion discussion = createMergeRequestDiscussion(mergeRequestDiff, fullPath, lineNumber, body);
 
         gitLabAPIV4.getGitLabAPIMergeRequestDiscussion().createDiscussion(projectId, mergeRequestIid, discussion);

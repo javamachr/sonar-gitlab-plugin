@@ -276,4 +276,9 @@ public class GitLabPluginConfiguration {
         return configuration.getInt(GitLabPlugin.GITLAB_CI_MERGE_REQUEST_IID).orElse(-1);
     }
 
+    public int pullRequestKey() {
+        return configuration.getInt(GitLabPlugin.SONAR_PULL_REQUEST_KEY).orElse(-1);
+    }
+
+
 }
