@@ -68,6 +68,7 @@ public class GitLabPlugin implements Plugin {
     public static final String GITLAB_DISABLE_PROXY = "sonar.gitlab.disable_proxy";
     public static final String GITLAB_MERGE_REQUEST_DISCUSSION = "sonar.gitlab.merge_request_discussion";
     public static final String GITLAB_CI_MERGE_REQUEST_IID = "sonar.gitlab.ci_merge_request_iid";
+    public static final String SONAR_PULL_REQUEST_KEY = "sonar.pullrequest.key";
 
     public static final String CATEGORY = "gitlab";
     public static final String SUBCATEGORY = "reporting";
