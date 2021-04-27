@@ -22,8 +22,8 @@ jobs:
         with:
           java-version: 11
 
-      - name: mvn clean verify
-        run: mvn ${MAVEN_CLI_OPTS} clean verify -Dsources.skip
+      - name: mvn clean verify package
+        run: mvn ${MAVEN_CLI_OPTS} clean verify package -Dsources.skip
 
       - name: Get tag version
         id: get_version
