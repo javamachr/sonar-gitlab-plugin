@@ -283,7 +283,7 @@ public class GitLabApiV4Wrapper implements IGitLabApiWrapper {
     @Override
     public void createOrUpdateReviewComment(String revision, String fullPath, Integer line, String body) {
         try {
-            if (config.isMergeRequestDiscussionEnabled()) {
+            if (config.isMergeRequestDiscussionEnabled() && config.mergeRequestIid() != -1) {
                 createReviewDiscussion(fullPath, line, body);
             } else {
                 gitLabAPIV4.getGitLabAPICommits().postCommitComments(gitLabProject.getId(), revision != null ? revision : getFirstCommitSHA(), body, fullPath, line, "new");
