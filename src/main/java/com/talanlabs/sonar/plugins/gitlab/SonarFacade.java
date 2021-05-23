@@ -258,6 +258,9 @@ public class SonarFacade {
         }
         else if (isNotBlankAndNotEmpty(branch)) {
             searchRequest.setBranch(branch);
+            if (! gitLabPluginConfiguration.allIssues()) {
+            	searchRequest.setSinceLeakPeriod("true");
+            }
         }
         return wsClient.issues().search(searchRequest);
     }
