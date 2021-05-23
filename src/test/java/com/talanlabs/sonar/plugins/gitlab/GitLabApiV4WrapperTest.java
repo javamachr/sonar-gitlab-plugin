@@ -156,19 +156,35 @@ public class GitLabApiV4WrapperTest {
     }
 
     @Test
-    public void testCreateReviewDiscussionMissingIidFail() {
+    public void testCreateReviewDiscussionMissingIidFallbackCommentOnCommit() throws IOException {
         GitLabPluginConfiguration gitLabPluginConfiguration = mock(GitLabPluginConfiguration.class);
+        when(gitLabPluginConfiguration.commitSHA()).thenReturn(Collections.singletonList("1"));
+        when(gitLabPluginConfiguration.refName()).thenReturn("master");
         when(gitLabPluginConfiguration.mergeRequestIid()).thenReturn(-1);
         when(gitLabPluginConfiguration.isMergeRequestDiscussionEnabled()).thenReturn(true);
 
         GitLabApiV4Wrapper facade = new GitLabApiV4Wrapper(gitLabPluginConfiguration);
 
+        GitLabAPI gitLabAPI = mock(GitLabAPI.class);
+        facade.setGitLabAPI(gitLabAPI);
+
+        GitLabAPICommits gitLabAPICommits = mock(GitLabAPICommits.class);
+        when(gitLabAPICommits.postCommitComments("1", "1", "pending", "master", null, null)).thenReturn(null);
+
+        when(gitLabAPI.getGitLabAPICommits()).thenReturn(gitLabAPICommits);
+
         GitLabProject gitLabProject = mock(GitLabProject.class);
         when(gitLabProject.getId()).thenReturn(1);
         facade.setGitLabProject(gitLabProject);
 
-        assertThatIllegalArgumentException().isThrownBy(() ->
-                facade.createOrUpdateReviewComment(null, "src/main/Foo.java", 5, "nothing"));
+        facade.createOrUpdateReviewComment(null, "src/main/Foo.java", 5, "nothing");
+
+        verify(gitLabAPICommits).postCommitComments(1, "1", "nothing", "src/main/Foo.java", 5, "new");
+
+        
+        
+        //assertThatIllegalArgumentException().isThrownBy(() ->
+        //        facade.createOrUpdateReviewComment(null, "src/main/Foo.java", 5, "nothing"));
     }
 
     @Test
