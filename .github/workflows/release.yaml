@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
+          distribution: "adopt"
 
       - name: mvn clean verify package
         run: mvn ${MAVEN_CLI_OPTS} clean verify package -Dsources.skip
