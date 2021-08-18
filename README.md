@@ -7,6 +7,10 @@ Inspired by https://github.com/SonarCommunity/sonar-github
 
 # Current version
 
+## Version 5.1.1
+
+ * merged [On branch limit analysis to new issues since last leak period](https://github.com/javamachr/sonar-gitlab-plugin/pull/16) 
+
 ## Version 5.0.0
 
  * merged [Rename codeclimate.json to gl-code-quality-report.json](https://github.com/javamachr/sonar-gitlab-plugin/pull/2)
