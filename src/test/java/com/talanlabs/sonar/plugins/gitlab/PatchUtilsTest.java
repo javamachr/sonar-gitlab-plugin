@@ -38,7 +38,7 @@ public class PatchUtilsTest {
     }
 
     @Test
-    public void testCorrect() {
+    public void testCorrectUnixEOL() {
         Assertions.assertThat(PatchUtils.getPositionsFromPatch("@@ -78,6 +78,27 @@\n" +
                 "\t\t\t\t\"src/styles.scss\",\n" +
                 "                \"src/cordova-styles.scss\"\n" +
@@ -73,4 +73,76 @@ public class PatchUtilsTest {
         );
     }
 
+
+    @Test
+    public void testCorrectMacEOL() {
+        Assertions.assertThat(PatchUtils.getPositionsFromPatch("@@ -78,6 +78,27 @@\r" +
+                "\t\t\t\t\"src/styles.scss\",\r" +
+                "                \"src/cordova-styles.scss\"\r" +
+                "              ]\r" +
+                "            },\r" +
+                "+           \"prod-cordova\": {\r" +
+                "+             \"optimization\": true,\r" +
+                "+             \"outputHashing\": \"all\",\r" +
+                "              \"sourceMap\": false,\r" +
+                "              \"extractCss\": true,\r" +
+                "              \"namedChunks\": false,\r" +
+                "              \"aot\": true,\r" +
+                "              \"extractLicenses\": true,\r" +
+                "              \"vendorChunk\": false,\r" +
+                "              \"buildOptimizer\": true,\r" +
+                "              \"fileReplacements\": [\r" +
+                "                {\r" +
+                "                  \"replace\": \"src/environments/environment.ts\",\r" +
+                "                  \"with\": \"src/environments/environment.prod-cordova.ts\"\r" +
+                "                }\r" +
+                "              ],\r" +
+                "              \"styles\": [\r" +
+                "                \"src/styles.scss\",\r" +
+                "                \"src/cordova-styles.scss\"\r" +
+                "              ]\r" +
+                "            }\r" +
+                "          }\r" +
+                "        },")).isNotEmpty().hasSize(3).containsExactlyInAnyOrder(
+                new IGitLabApiWrapper.Line(83, "             \"outputHashing\": \"all\","),
+                new IGitLabApiWrapper.Line(82, "             \"optimization\": true,"),
+                new IGitLabApiWrapper.Line(81, "           \"prod-cordova\": {")
+        );
+    }
+
+    @Test
+    public void testCorrectWindowsEOL() {
+        Assertions.assertThat(PatchUtils.getPositionsFromPatch("@@ -78,6 +78,27 @@\n" +
+                "\t\t\t\t\"src/styles.scss\",\r\n" +
+                "                \"src/cordova-styles.scss\"\r\n" +
+                "              ]\r\n" +
+                "            },\r\n" +
+                "+           \"prod-cordova\": {\r\n" +
+                "+             \"optimization\": true,\r\n" +
+                "+             \"outputHashing\": \"all\",\r\n" +
+                "              \"sourceMap\": false,\r\n" +
+                "              \"extractCss\": true,\r\n" +
+                "              \"namedChunks\": false,\r\n" +
+                "              \"aot\": true,\r\n" +
+                "              \"extractLicenses\": true,\r\n" +
+                "              \"vendorChunk\": false,\r\n" +
+                "              \"buildOptimizer\": true,\r\n" +
+                "              \"fileReplacements\": [\r\n" +
+                "                {\r\n" +
+                "                  \"replace\": \"src/environments/environment.ts\",\r\n" +
+                "                  \"with\": \"src/environments/environment.prod-cordova.ts\"\r\n" +
+                "                }\r\n" +
+                "              ],\r\n" +
+                "              \"styles\": [\rn" +
+                "                \"src/styles.scss\",\r\n" +
+                "                \"src/cordova-styles.scss\"\r\n" +
+                "              ]\r\n" +
+                "            }\r\n" +
+                "          }\r\n" +
+                "        },")).isNotEmpty().hasSize(3).containsExactlyInAnyOrder(
+                new IGitLabApiWrapper.Line(83, "             \"outputHashing\": \"all\","),
+                new IGitLabApiWrapper.Line(82, "             \"optimization\": true,"),
+                new IGitLabApiWrapper.Line(81, "           \"prod-cordova\": {")
+        );
+    }
 }
