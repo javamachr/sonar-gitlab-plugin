@@ -7,6 +7,11 @@ Inspired by https://github.com/SonarCommunity/sonar-github
 
 # Current version
 
+
+## Version 5.1.2
+
+ * merged [Support MacOS EOLs](https://github.com/javamachr/sonar-gitlab-plugin/pull/20) 
+ * 
 ## Version 5.1.1
 
  * merged [On branch limit analysis to new issues since last leak period](https://github.com/javamachr/sonar-gitlab-plugin/pull/16) 
