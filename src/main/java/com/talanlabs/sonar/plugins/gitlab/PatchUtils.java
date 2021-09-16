@@ -37,7 +37,7 @@ public class PatchUtils {
         Set<IGitLabApiWrapper.Line> positions = new HashSet<>();
 
         int currentLine = -1;
-        for (String line : patch.split("\\n|\\r\\n")) {
+        for (String line : patch.split("[\\r\\n]+")) {
             if (line.startsWith("@")) {
                 Matcher matcher = PATCH_PATTERN.matcher(line);
                 if (!matcher.matches()) {
