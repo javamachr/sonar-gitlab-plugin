@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@ package com.talanlabs.sonar.plugins.gitlab;
 import com.talanlabs.sonar.plugins.gitlab.models.Issue;
 import com.talanlabs.sonar.plugins.gitlab.models.QualityGate;
 import com.talanlabs.sonar.plugins.gitlab.models.StatusNotificationsMode;
+import org.jetbrains.annotations.NotNull;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.postjob.PostJob;
 import org.sonar.api.batch.postjob.PostJobContext;
@@ -67,7 +68,7 @@ public class CommitPublishPostJob implements PostJob {
     }
 
     @Override
-    public void execute(PostJobContext context) {
+    public void execute(@NotNull PostJobContext context) {
         LOG.info("Will execute CommitPublishPostJob of GitlabPlugin.");
         try {
             if (!gitLabPluginConfiguration.isEnabled()) {

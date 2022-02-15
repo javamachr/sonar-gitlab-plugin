@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,10 +19,10 @@
  */
 package com.talanlabs.sonar.plugins.gitlab;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Objects;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 
 public interface IGitLabApiWrapper {
 
@@ -47,9 +47,9 @@ public interface IGitLabApiWrapper {
 
     class Line {
 
-        private Integer number;
+        private final Integer number;
 
-        private String content;
+        private final String content;
 
         Line(Integer number, String content) {
             this.number = number;

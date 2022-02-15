@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -24,18 +24,14 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.talanlabs.sonar.plugins.gitlab.models.*;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.sonar.api.batch.rule.Severity;
 
-import javax.annotation.Nullable;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 
 public class Reporter {
 
@@ -43,12 +39,12 @@ public class Reporter {
 
     private final GitLabPluginConfiguration gitLabPluginConfiguration;
 
-    private int[] newIssuesBySeverity = new int[SEVERITIES.size()];
-    private Map<Severity, List<ReportIssue>> reportIssuesMap = new EnumMap<>(Severity.class);
-    private Map<Severity, List<ReportIssue>> notReportedOnDiffMap = new EnumMap<>(Severity.class);
-    private Map<String, Map<File, Map<Integer, List<ReportIssue>>>> revisionFileLineMap = new HashMap<>();
+    private final int[] newIssuesBySeverity = new int[SEVERITIES.size()];
+    private final Map<Severity, List<ReportIssue>> reportIssuesMap = new EnumMap<>(Severity.class);
+    private final Map<Severity, List<ReportIssue>> notReportedOnDiffMap = new EnumMap<>(Severity.class);
+    private final Map<String, Map<File, Map<Integer, List<ReportIssue>>>> revisionFileLineMap = new HashMap<>();
     private int notReportedIssueCount = 0;
-    private List<ReportIssue> jsonIssues = new ArrayList<>();
+    private final List<ReportIssue> jsonIssues = new ArrayList<>();
     private QualityGate qualityGate;
 
     public Reporter(GitLabPluginConfiguration gitLabPluginConfiguration) {

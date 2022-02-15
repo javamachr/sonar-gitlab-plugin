@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,19 +19,18 @@
  */
 package com.talanlabs.sonar.plugins.gitlab.api;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
-
 import com.talanlabs.gitlab.api.Paged;
 import com.talanlabs.gitlab.api.v4.GitLabAPI;
 import com.talanlabs.gitlab.api.v4.Pagination;
 import com.talanlabs.gitlab.api.v4.http.Query;
 import com.talanlabs.gitlab.api.v4.utils.QueryHelper;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GitLabAPIMergeRequestDiscussionExt {
 
@@ -77,12 +76,12 @@ public class GitLabAPIMergeRequestDiscussionExt {
 			do {
 				if (paged.getResults() != null) {
 					if (discussions == null) {
-						discussions = new ArrayList<GitlabDiscussionStatus>();
+						discussions = new ArrayList<>();
 					}
 					discussions.addAll(paged.getResults());
 				}
 			} while ((paged = paged.nextPage()) != null);
-		
+
 
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Existing count {}", discussions.size());
@@ -97,7 +96,7 @@ public class GitLabAPIMergeRequestDiscussionExt {
 						LOG.debug("-Note {}: {}",note.getBody().length(), note.getBody());
 					});
 				});
-				
+
 				LOG.debug("Current Issue Comment:");
 				LOG.debug("Path {} {}", fullPath, lineNumber);
 				LOG.debug("bSha: {}, hSha {}", baseSha, headSha);
@@ -107,7 +106,7 @@ public class GitLabAPIMergeRequestDiscussionExt {
 
 		boolean isExist = discussions.stream().anyMatch(x ->
 			x.getNotes().stream().anyMatch(n ->
-				   	body.equals(n.getBody()) 
+				   	body.equals(n.getBody())
 				   	&& n.getPosition() != null
 					&& lineNumber.equals(n.getPosition().getNewLine())
 					&& baseSha.equals(n.getPosition().getBaseSha())
@@ -115,7 +114,7 @@ public class GitLabAPIMergeRequestDiscussionExt {
 					&& fullPath.equals(n.getPosition().getNewPath())
 				)
 			);
-		
+
 		if(isExist)
 			LOG.debug("-------------------Issue Comment already exist on MR----------------------");
 

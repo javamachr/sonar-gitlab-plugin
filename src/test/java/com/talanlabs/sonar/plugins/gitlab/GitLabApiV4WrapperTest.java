@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -27,9 +27,8 @@ import com.talanlabs.gitlab.api.v4.services.GitLabAPICommits;
 import com.talanlabs.gitlab.api.v4.services.GitLabAPIMergeRequestDiff;
 import com.talanlabs.gitlab.api.v4.services.GitLabAPIMergeRequestDiscussion;
 import com.talanlabs.sonar.plugins.gitlab.api.GitLabAPIMergeRequestDiscussionExt;
-
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -181,8 +180,8 @@ public class GitLabApiV4WrapperTest {
 
         verify(gitLabAPICommits).postCommitComments(1, "1", "nothing", "src/main/Foo.java", 5, "new");
 
-        
-        
+
+
         //assertThatIllegalArgumentException().isThrownBy(() ->
         //        facade.createOrUpdateReviewComment(null, "src/main/Foo.java", 5, "nothing"));
     }
@@ -249,18 +248,18 @@ public class GitLabApiV4WrapperTest {
         GitLabProject gitLabProject = mock(GitLabProject.class);
         when(gitLabProject.getId()).thenReturn(projectId);
         facade.setGitLabProject(gitLabProject);
-        
+
         GitLabAPIMergeRequestDiscussionExt gitLabAPIExt = mock(GitLabAPIMergeRequestDiscussionExt.class);
         facade.setGitLabAPIExt(gitLabAPIExt);
-              
+
         when(gitLabAPIExt.hasDiscussion(anyInt(), anyInt(), anyString(), anyInt(), anyString(), anyString(), anyString())).thenReturn(false);
-        
+
         GitLabAPIMergeRequestDiscussion mergeRequestDiscussion = mock(GitLabAPIMergeRequestDiscussion.class);
         when(gitLabAPI.getGitLabAPIMergeRequestDiscussion()).thenReturn(mergeRequestDiscussion);
 
         facade.createOrUpdateReviewComment(null, "src/main/Foo.java", 5, "nothing");
 
-        verify(mergeRequestDiscussion).createDiscussion(Matchers.eq(projectId), Matchers.eq(mrIid), anyObject());
+        verify(mergeRequestDiscussion).createDiscussion(Mockito.eq(projectId), Mockito.eq(mrIid), any());
     }
 
     private GitlabMergeRequestDiff gitlabMergeRequestDiff(int mrIid) {

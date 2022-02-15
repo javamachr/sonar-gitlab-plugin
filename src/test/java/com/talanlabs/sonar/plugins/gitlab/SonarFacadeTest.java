@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -20,10 +20,10 @@
 package com.talanlabs.sonar.plugins.gitlab;
 
 import com.google.protobuf.AbstractMessageLite;
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.talanlabs.sonar.plugins.gitlab.models.Issue;
 import com.talanlabs.sonar.plugins.gitlab.models.QualityGate;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import okio.Buffer;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.Assertions;
@@ -39,19 +39,10 @@ import org.sonar.api.config.PropertyDefinitions;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.utils.System2;
-import org.sonarqube.ws.Ce;
-import org.sonarqube.ws.Common;
-import org.sonarqube.ws.Components;
-import org.sonarqube.ws.Issues;
-import org.sonarqube.ws.Qualitygates;
-import org.sonarqube.ws.Rules;
+import org.sonarqube.ws.*;
 import org.sonarqube.ws.client.HttpException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.List;
 

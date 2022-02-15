@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,11 +19,7 @@
  */
 package com.talanlabs.sonar.plugins.gitlab;
 
-import com.talanlabs.sonar.plugins.gitlab.models.Issue;
-import com.talanlabs.sonar.plugins.gitlab.models.JsonMode;
-import com.talanlabs.sonar.plugins.gitlab.models.QualityGate;
-import com.talanlabs.sonar.plugins.gitlab.models.ReportIssue;
-import com.talanlabs.sonar.plugins.gitlab.models.Rule;
+import com.talanlabs.sonar.plugins.gitlab.models.*;
 import org.sonar.api.ExtensionPoint;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.scanner.ScannerSide;

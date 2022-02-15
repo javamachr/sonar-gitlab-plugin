@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ public class PatchUtils {
         // Nothing
     }
 
-    public static final Set<IGitLabApiWrapper.Line> getPositionsFromPatch(String patch) {
+    public static Set<IGitLabApiWrapper.Line> getPositionsFromPatch(String patch) {
         Set<IGitLabApiWrapper.Line> positions = new HashSet<>();
 
         int currentLine = -1;

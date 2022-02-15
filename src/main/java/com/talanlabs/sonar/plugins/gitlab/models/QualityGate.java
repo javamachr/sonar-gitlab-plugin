@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -60,7 +60,7 @@ public class QualityGate {
 
     public static class Builder {
 
-        private QualityGate qualityGate;
+        private final QualityGate qualityGate;
 
         private Builder() {
             this.qualityGate = new QualityGate();
@@ -129,7 +129,7 @@ public class QualityGate {
 
         public static class Builder {
 
-            private Condition condition;
+            private final Condition condition;
 
             private Builder() {
                 this.condition = new Condition();

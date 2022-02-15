@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -35,17 +35,8 @@ import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonarqube.ws.Ce;
-import org.sonarqube.ws.Issues;
-import org.sonarqube.ws.MediaTypes;
-import org.sonarqube.ws.Qualitygates;
-import org.sonarqube.ws.Rules;
-import org.sonarqube.ws.client.GetRequest;
-import org.sonarqube.ws.client.HttpConnector;
-import org.sonarqube.ws.client.HttpException;
-import org.sonarqube.ws.client.WsClient;
-import org.sonarqube.ws.client.WsClientFactories;
-import org.sonarqube.ws.client.WsResponse;
+import org.sonarqube.ws.*;
+import org.sonarqube.ws.client.*;
 import org.sonarqube.ws.client.ce.TaskRequest;
 import org.sonarqube.ws.client.components.ShowRequest;
 import org.sonarqube.ws.client.issues.SearchRequest;
@@ -54,14 +45,7 @@ import org.sonarqube.ws.client.qualitygates.ProjectStatusRequest;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -79,8 +63,8 @@ public class SonarFacade {
     private File projectBaseDir;
     private File workDir;
 
-    private Cache<String, File> componentCache = CacheBuilder.newBuilder().build();
-    private Cache<String, Rule> ruleCache = CacheBuilder.newBuilder().build();
+    private final Cache<String, File> componentCache = CacheBuilder.newBuilder().build();
+    private final Cache<String, Rule> ruleCache = CacheBuilder.newBuilder().build();
 
     public SonarFacade(Configuration settings, GitLabPluginConfiguration gitLabPluginConfiguration) {
         this.gitLabPluginConfiguration = gitLabPluginConfiguration;
@@ -205,7 +189,7 @@ public class SonarFacade {
     @VisibleForTesting
     String getMetricName(String metricKey) {
         try {
-            Metric metric = CoreMetrics.getMetric(metricKey);
+            Metric<?> metric = CoreMetrics.getMetric(metricKey);
             return metric.getName();
         } catch (NoSuchElementException e) {
             LOG.trace("Using key as name for custom metric '{}' due to '{}'", metricKey, e);
@@ -270,7 +254,7 @@ public class SonarFacade {
     }
 
     private String toString(GetRequest getRequest) {
-        String params = getRequest.getParams().entrySet().stream().sorted(Comparator.comparing(Map.Entry::getKey)).map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.joining("&"));
+        String params = getRequest.getParams().entrySet().stream().sorted(Map.Entry.comparingByKey()).map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.joining("&"));
         return getRequest.getPath() + "?" + params;
     }
 
