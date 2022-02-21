@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,9 +19,9 @@
  */
 package com.talanlabs.sonar.plugins.gitlab.api;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 
 public class GitlabDiscussionStatus {
 
@@ -56,5 +56,5 @@ public class GitlabDiscussionStatus {
 	public void setNotes(List<GitlabNote> notes) {
 		this.notes = notes;
 	}
-    
+
 }

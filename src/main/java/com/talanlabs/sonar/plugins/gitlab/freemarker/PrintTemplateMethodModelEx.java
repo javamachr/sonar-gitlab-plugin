@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ public class PrintTemplateMethodModelEx implements TemplateMethodModelEx {
         throw new TemplateModelException("Failed call accept 1 issue arg");
     }
 
-    private Object execOneArg(Object arg) throws TemplateModelException {
+    private String execOneArg(Object arg) throws TemplateModelException {
         if (arg instanceof WrapperTemplateModel && ((WrapperTemplateModel) arg).getWrappedObject() instanceof Map) {
             Map<String, Object> map = (Map<String, Object>) ((WrapperTemplateModel) arg).getWrappedObject();
             return markDownUtils.printIssue((Severity) (map.get("severity")), (String) map.get("message"), (String) map.get("ruleLink"), (String) map.get("url"), (String) map.get("componentKey"));

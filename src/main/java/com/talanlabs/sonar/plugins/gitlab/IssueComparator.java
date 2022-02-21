@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,9 +22,9 @@ package com.talanlabs.sonar.plugins.gitlab;
 import com.talanlabs.sonar.plugins.gitlab.models.Issue;
 import org.sonar.api.batch.rule.Severity;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Objects;
+import javax.annotation.Nullable;
 
 public final class IssueComparator implements Comparator<Issue> {
     private static int compareComponentKeyAndLine(Issue left, Issue right) {

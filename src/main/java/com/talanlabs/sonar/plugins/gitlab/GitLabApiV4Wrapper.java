@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,28 +22,24 @@ package com.talanlabs.sonar.plugins.gitlab;
 import com.talanlabs.gitlab.api.Paged;
 import com.talanlabs.gitlab.api.v4.GitLabAPI;
 import com.talanlabs.gitlab.api.v4.GitlabMergeRequestDiff;
-import com.talanlabs.gitlab.api.v4.models.GitlabMergeRequest;
 import com.talanlabs.gitlab.api.v4.models.GitlabPosition;
 import com.talanlabs.gitlab.api.v4.models.commits.GitLabCommit;
 import com.talanlabs.gitlab.api.v4.models.commits.GitLabCommitComments;
 import com.talanlabs.gitlab.api.v4.models.commits.GitLabCommitDiff;
 import com.talanlabs.gitlab.api.v4.models.discussion.GitlabDiscussion;
-import com.talanlabs.gitlab.api.v4.models.discussion.GitlabDiscussionStatus;
 import com.talanlabs.gitlab.api.v4.models.projects.GitLabProject;
 import com.talanlabs.gitlab.api.v4.models.users.GitLabUser;
 import com.talanlabs.sonar.plugins.gitlab.api.GitLabAPIMergeRequestDiscussionExt;
-
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 
 public class GitLabApiV4Wrapper implements IGitLabApiWrapper {
 
@@ -55,7 +51,7 @@ public class GitLabApiV4Wrapper implements IGitLabApiWrapper {
     private GitLabAPI gitLabAPIV4;
     private GitLabProject gitLabProject;
     private GitLabAPIMergeRequestDiscussionExt gitLabAPIExt;
-    
+
     private Map<String, List<GitLabCommitComments>> commitCommentPerRevision;
     private Map<String, Map<String, Set<Line>>> patchPositionByFile;
 
@@ -82,7 +78,7 @@ public class GitLabApiV4Wrapper implements IGitLabApiWrapper {
     void setGitLabAPI(GitLabAPI gitLabAPI) {
         this.gitLabAPIV4 = gitLabAPI;
     }
-    
+
     void setGitLabAPIExt(GitLabAPIMergeRequestDiscussionExt gitLabAPIExt) {
         this.gitLabAPIExt = gitLabAPIExt;
     }
@@ -305,9 +301,9 @@ public class GitLabApiV4Wrapper implements IGitLabApiWrapper {
         checkArgument(mergeRequestDiffs.getResults() != null && !mergeRequestDiffs.getResults().isEmpty(), "There are no merge request diffs.");
 
         GitlabMergeRequestDiff mergeRequestDiff = mergeRequestDiffs.getResults().get(0);
-       
+
         gitLabAPIExt = gitLabAPIExt == null ? new GitLabAPIMergeRequestDiscussionExt(gitLabAPIV4): gitLabAPIExt;
-        
+
         if(gitLabAPIExt.hasDiscussion(projectId, mergeRequestIid, fullPath, lineNumber, body, mergeRequestDiff.getBaseCommitSha(), mergeRequestDiff.getHeadCommitSha())) {
         	LOG.debug("discussion already exist");
         	return;

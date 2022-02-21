@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -23,17 +23,17 @@ import com.talanlabs.sonar.plugins.gitlab.models.JsonMode;
 import com.talanlabs.sonar.plugins.gitlab.models.QualityGateFailMode;
 import com.talanlabs.sonar.plugins.gitlab.models.StatusNotificationsMode;
 import org.sonar.api.CoreProperties;
-import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.config.Configuration;
+import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.utils.System2;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
-import javax.annotation.CheckForNull;
 import java.net.*;
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.CheckForNull;
 
 @ScannerSide
 public class GitLabPluginConfiguration {

@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -27,8 +27,6 @@ import org.sonar.api.utils.MessageException;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -36,6 +34,8 @@ import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 
 /**
  * Facade for all WS interaction with GitLab.
@@ -181,7 +181,7 @@ public class CommitFacade {
             try {
                 Files.write(Paths.get(file.getAbsolutePath()), json.getBytes(), StandardOpenOption.CREATE);
             } catch (IOException e) {
-                throw MessageException.of("Failed to write file " + file.toString(), e);
+                throw MessageException.of("Failed to write file " + file, e);
             }
         }
     }

@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,18 +19,13 @@
  */
 package com.talanlabs.sonar.plugins.gitlab;
 
-import com.talanlabs.sonar.plugins.gitlab.freemarker.EmojiSeverityTemplateMethodModelEx;
-import com.talanlabs.sonar.plugins.gitlab.freemarker.ImageSeverityTemplateMethodModelEx;
-import com.talanlabs.sonar.plugins.gitlab.freemarker.IssueCountTemplateMethodModelEx;
-import com.talanlabs.sonar.plugins.gitlab.freemarker.IssuesTemplateMethodModelEx;
-import com.talanlabs.sonar.plugins.gitlab.freemarker.PrintTemplateMethodModelEx;
-import com.talanlabs.sonar.plugins.gitlab.freemarker.RuleLinkTemplateMethodModelEx;
+import com.talanlabs.sonar.plugins.gitlab.freemarker.*;
 import com.talanlabs.sonar.plugins.gitlab.models.ReportIssue;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.utils.MessageException;
 import org.sonar.api.utils.log.Logger;
@@ -75,7 +70,7 @@ public abstract class AbstractCommentBuilder {
     }
 
     private String buildFreemarkerComment() {
-        Configuration cfg = new Configuration(Configuration.getVersion());
+        Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
         cfg.setDefaultEncoding("UTF-8");
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         cfg.setLogTemplateExceptions(false);

@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ import com.talanlabs.sonar.plugins.gitlab.models.QualityGate;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.config.PropertyDefinition;
@@ -34,8 +33,6 @@ import org.sonar.api.utils.System2;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static org.mockito.Mockito.when;
 
 public class GlobalTemplateTest {
 

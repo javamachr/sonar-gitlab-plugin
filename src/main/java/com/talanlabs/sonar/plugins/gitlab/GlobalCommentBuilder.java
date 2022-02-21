@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -26,12 +26,7 @@ import com.talanlabs.sonar.plugins.gitlab.models.QualityGate;
 import com.talanlabs.sonar.plugins.gitlab.models.ReportIssue;
 import org.sonar.api.batch.rule.Severity;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class GlobalCommentBuilder extends AbstractCommentBuilder {
 

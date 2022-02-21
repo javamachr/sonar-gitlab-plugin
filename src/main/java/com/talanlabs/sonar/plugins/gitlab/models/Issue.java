@@ -1,6 +1,6 @@
 /*
  * SonarQube :: GitLab Plugin
- * Copyright (C) 2016-2017 Talanlabs
+ * Copyright (C) 2016-2022 Talanlabs
  * gabriel.allaigre@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -76,7 +76,7 @@ public class Issue {
 
     public static class Builder {
 
-        private Issue issue;
+        private final Issue issue;
 
         private Builder() {
             this.issue = new Issue();
