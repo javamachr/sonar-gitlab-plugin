@@ -36,8 +36,9 @@ publish_job:
       - ci_settings.xml
   script:
     - |
-      mvn --quiet deploy:deploy-file -s gitlab_settings.xml -DpomFile=pom.xml \
-                              -Dfile=target/sonar-gitlab-plugin-*.jar \
+      jarfile=$(ls target/sonar-gitlab-plugin*.jar)
+      mvn deploy:deploy-file -s gitlab_settings.xml -DpomFile=pom.xml \
+                              -Dfile=${jarfile} \
                               -DrepositoryId=gitlab-maven \
                               -Durl=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven
 
