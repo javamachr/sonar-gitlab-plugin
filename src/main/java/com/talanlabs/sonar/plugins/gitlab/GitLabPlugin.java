@@ -69,6 +69,7 @@ public class GitLabPlugin implements Plugin {
     public static final String GITLAB_MERGE_REQUEST_DISCUSSION = "sonar.gitlab.merge_request_discussion";
     public static final String GITLAB_CI_MERGE_REQUEST_IID = "sonar.gitlab.ci_merge_request_iid";
     public static final String SONAR_PULL_REQUEST_KEY = "sonar.pullrequest.key";
+    public static final String GITLAB_FAIL_ON_QUALITY_GATE = "sonar.gitlab.fail_on_qualitygate";
 
     public static final String CATEGORY = "gitlab";
     public static final String SUBCATEGORY = "reporting";
@@ -166,7 +167,11 @@ public class GitLabPlugin implements Plugin {
                         PropertyDefinition.builder(GITLAB_CI_MERGE_REQUEST_IID).name("Merge Request IID").description("The IID of the merge request if it’s pipelines for merge requests")
                                 .category(CATEGORY).subCategory(SUBCATEGORY).type(PropertyType.INTEGER)
                                 .defaultValue(String.valueOf(-1))
-                                .index(35).build()
+                                .index(35).build(),
+                        PropertyDefinition.builder(GITLAB_FAIL_ON_QUALITY_GATE).name("Quality Gate fail").description("Fail the scan process based on quality gate error status")
+                                .category(CATEGORY).subCategory(SUBCATEGORY).type(PropertyType.BOOLEAN)
+                                .defaultValue(String.valueOf(false))
+                                .index(36).build()
 
                 );
     }
