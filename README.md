@@ -7,6 +7,9 @@ Inspired by https://github.com/SonarCommunity/sonar-github
 
 # Current version
 
+## Version 5.1.3
+
+ * merged [Throw exception on quality gate fail/error](https://github.com/javamachr/sonar-gitlab-plugin/pull/24)
 
 ## Version 5.1.2
 
