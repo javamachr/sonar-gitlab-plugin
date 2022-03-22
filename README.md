@@ -7,6 +7,9 @@ Inspired by https://github.com/SonarCommunity/sonar-github
 
 # Current version
 
+## Version 5.1.3
+
+ * merged [Throw exception on quality gate fail/error](https://github.com/javamachr/sonar-gitlab-plugin/pull/24)
 
 ## Version 5.1.2
 
@@ -338,6 +341,7 @@ https://docs.gitlab.com/ce/ci/variables/#9-0-renaming
 | sonar.gitlab.disable_proxy | Disable proxy if system contains proxy config (default false) | Administration, Variable | >= 4.0.0 |
 | sonar.gitlab.merge_request_discussion | Allows to post the comments as discussions (default false) | Project, Variable | >= 4.0.0 |
 | sonar.gitlab.ci_merge_request_iid | The IID of the merge request if it’s pipelines for merge requests | Project, Variable | >= 4.0.0 |
+| sonar.gitlab.fail_on_qualitygate | Fail scan if the quality gate fails (default false), this is required to fail the scanner since the plugin requires the `sonar.qualitygate.wait=false` to run | Project, Variable | >= 5.0.2 |
 
 - Administration : **Settings** globals in SonarQube
 - Project : **Settings** of project in SonarQube

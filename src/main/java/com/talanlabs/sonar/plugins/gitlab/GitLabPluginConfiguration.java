@@ -280,5 +280,8 @@ public class GitLabPluginConfiguration {
         return configuration.getInt(GitLabPlugin.SONAR_PULL_REQUEST_KEY).orElse(-1);
     }
 
+    public boolean failOnQualityGate() {
+        return configuration.getBoolean(GitLabPlugin.GITLAB_FAIL_ON_QUALITY_GATE).orElse(false);
+    }
 
 }

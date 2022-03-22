@@ -98,6 +98,12 @@ public class CommitPublishPostJob implements PostJob {
 
             Reporter report = reporterBuilder.build(qualityGate, issues);
             notification(report);
+
+            if(gitLabPluginConfiguration.failOnQualityGate() && QualityGate.Status.ERROR.equals(qualityGate.getStatus()))
+            {
+                throw MessageException.of("Quality Gate failed. Exiting scan with failure.");
+            }
+
         } catch (MessageException e) {
             StatusNotificationsMode i = gitLabPluginConfiguration.statusNotificationsMode();
             if (i == StatusNotificationsMode.COMMIT_STATUS) {

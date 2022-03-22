@@ -1,46 +1,67 @@
 image: maven:3.3.3-jdk-8
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
 stages:
   - build
+  - publish
   - test
   - deploy
+
 build_job:
   stage: build
-  only:
-    - master
   script:
-    - mvn --batch-mode compile -Dmaven.test.skip=true -Djacoco.skip=true
+    - mvn --quiet clean package
+  cache:
+    key: maven
+    paths:
+      - .m2/repository
+  artifacts:
+    paths:
+      - target/*.jar
   tags:
     - docker
-build_merge_job:
-  stage: build
-  except:
-    - master
-    - tags
+
+publish_job:
+  stage: publish
+  dependencies:
+    - build_job
+  artifacts:
+    paths:
+      - ci_settings.xml
   script:
-    - git merge origin master --no-commit --no-ff
-    - mvn --batch-mode compile -Dmaven.test.skip=true -Djacoco.skip=true
-  tags:
-    - docker
+    - |
+      jarfile=$(ls target/sonar-gitlab-plugin*.jar)
+      mvn deploy:deploy-file -s gitlab_settings.xml -DpomFile=pom.xml \
+                              -Dfile=${jarfile} \
+                              -DrepositoryId=gitlab-maven \
+                              -Durl=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven
+
 test_sonar_preview_job:
   stage: test
   except:
     - master
     - tags
   script:
-    - git merge origin master --no-commit --no-ff
     - mvn --batch-mode verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.4.0.905:sonar -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_LOGIN -Dsonar.analysis.mode=preview -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_ID
   tags:
     - docker
+
 test_sonar_feature_job:
   stage: test
   except:
     - master
     - tags
   script:
-    - git merge origin master --no-commit --no-ff
     - mvn --batch-mode verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.4.0.905:sonar -Dsonar.host.url=$SONAR_OFF_URL -Dsonar.login=$SONAR_OFF_LOGIN -Dsonar.branch.name=$CI_COMMIT_REF_NAME
   tags:
     - docker
+
 test_sonar_job:
   stage: test
   only:
