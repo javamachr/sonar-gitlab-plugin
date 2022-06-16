@@ -23,9 +23,7 @@ import com.talanlabs.sonar.plugins.gitlab.models.Issue;
 import org.mockito.Mockito;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.postjob.issue.PostJobIssue;
 import org.sonar.api.batch.rule.Severity;
-import org.sonar.api.rule.RuleKey;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -37,22 +35,6 @@ public class Utils {
 
     private Utils() {
         super();
-    }
-
-    public static PostJobIssue newMockedPostJobIssue(String componentKey, Severity severity, boolean isNew, String message) {
-        return newMockedPostJobIssue(componentKey, severity, isNew, message, null, null);
-    }
-
-    public static PostJobIssue newMockedPostJobIssue(String componentKey, Severity severity, boolean isNew, String message, InputComponent inputComponent, Integer line) {
-        PostJobIssue issue = Mockito.mock(PostJobIssue.class);
-        Mockito.when(issue.inputComponent()).thenReturn(inputComponent);
-        Mockito.when(issue.componentKey()).thenReturn(componentKey);
-        Mockito.when(issue.line()).thenReturn(line);
-        Mockito.when(issue.ruleKey()).thenReturn(RuleKey.of("repo", "rule"));
-        Mockito.when(issue.severity()).thenReturn(severity);
-        Mockito.when(issue.isNew()).thenReturn(isNew);
-        Mockito.when(issue.message()).thenReturn(message);
-        return issue;
     }
 
     public static InputComponent newMockedInputComponent(String key) {

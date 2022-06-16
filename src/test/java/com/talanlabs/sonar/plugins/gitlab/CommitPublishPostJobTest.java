@@ -30,8 +30,6 @@ import org.mockito.Mockito;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.postjob.PostJobContext;
 import org.sonar.api.batch.postjob.internal.DefaultPostJobDescriptor;
-import org.sonar.api.batch.postjob.issue.PostJobIssue;
-import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.config.PropertyDefinitions;
 import org.sonar.api.config.internal.ConfigurationBridge;
@@ -39,8 +37,6 @@ import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.utils.MessageException;
 import org.sonar.api.utils.System2;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -131,162 +127,6 @@ public class CommitPublishPostJobTest {
         Mockito.verify(reporterBuilder).build(eq(null), any());
         Mockito.verify(commitFacade).createOrUpdateSonarQubeStatus("success", "SonarQube reported no issues");
     }
-
-    @Test
-    public void testPreviewMode() {
-        PostJobIssue issue1 = Utils.newMockedPostJobIssue("foo:src", Severity.BLOCKER, true, "msg4", Utils.newMockedInputComponent("toto"), 0);
-        PostJobIssue issue2 = Utils.newMockedPostJobIssue("foo", Severity.BLOCKER, true, "msg", Utils.newMockedInputFile(new File("toto.java")), 0);
-        Iterable<PostJobIssue> issues = Arrays.asList(issue1, issue2);
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("success");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported no issues");
-
-        when(reporterBuilder.build(eq(null), any())).thenReturn(reporter);
-
-        commitPublishPostJob.execute(context);
-        Mockito.verify(reporterBuilder).build(eq(null), any());
-        Mockito.verify(commitFacade).createOrUpdateSonarQubeStatus("success", "SonarQube reported no issues");
-    }
-
-    @Test
-    public void testIssuesMode() {
-        PostJobIssue issue1 = Utils.newMockedPostJobIssue("foo:src", Severity.BLOCKER, true, "msg4");
-        PostJobIssue issue2 = Utils.newMockedPostJobIssue("foo", Severity.BLOCKER, true, "msg");
-        Iterable<PostJobIssue> issues = Arrays.asList(issue1, issue2);
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("failed");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported 2 issues");
-
-        when(reporterBuilder.build(eq(null), any())).thenReturn(reporter);
-
-        commitPublishPostJob.execute(context);
-        Mockito.verify(reporterBuilder).build(eq(null), any());
-        Mockito.verify(commitFacade).createOrUpdateSonarQubeStatus("failed", "SonarQube reported 2 issues");
-    }
-
-    @Test
-    public void testPreviewAndIssueMode() {
-        PostJobIssue issue1 = Utils.newMockedPostJobIssue("foo:src", Severity.BLOCKER, true, "msg4");
-        PostJobIssue issue2 = Utils.newMockedPostJobIssue("foo", Severity.BLOCKER, true, "msg");
-        Iterable<PostJobIssue> issues = Arrays.asList(issue1, issue2);
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("success");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported no issues");
-
-        when(reporterBuilder.build(eq(null), any())).thenReturn(reporter);
-
-        commitPublishPostJob.execute(context);
-        Mockito.verify(reporterBuilder).build(eq(null), any());
-        Mockito.verify(commitFacade).createOrUpdateSonarQubeStatus("success", "SonarQube reported no issues");
-    }
-
-    @Test
-    public void testSuccess() {
-        Iterable<PostJobIssue> issues = Collections.emptyList();
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("success");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported no issues");
-
-        when(reporterBuilder.build(eq(null), any())).thenReturn(reporter);
-
-        commitPublishPostJob.execute(context);
-        Mockito.verify(reporterBuilder).build(eq(null), any());
-        Mockito.verify(commitFacade).createOrUpdateSonarQubeStatus("success", "SonarQube reported no issues");
-    }
-
-    @Test
-    public void testFailed() {
-        PostJobIssue issue1 = Utils.newMockedPostJobIssue("foo:src", Severity.BLOCKER, true, "msg4");
-        PostJobIssue issue2 = Utils.newMockedPostJobIssue("foo", Severity.BLOCKER, true, "msg");
-        Iterable<PostJobIssue> issues = Arrays.asList(issue1, issue2);
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("failed");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported no issues");
-
-        when(reporterBuilder.build(eq(null), any())).thenReturn(reporter);
-
-        commitPublishPostJob.execute(context);
-        Mockito.verify(reporterBuilder).build(eq(null), any());
-        Mockito.verify(commitFacade).createOrUpdateSonarQubeStatus("failed", "SonarQube reported no issues");
-    }
-
-    @Test
-    public void testFailedNotificationExit() {
-        settings.setProperty(GitLabPlugin.GITLAB_STATUS_NOTIFICATION_MODE, StatusNotificationsMode.EXIT_CODE.getMeaning());
-
-        PostJobIssue issue1 = Utils.newMockedPostJobIssue("foo:src", Severity.BLOCKER, true, "msg4");
-        PostJobIssue issue2 = Utils.newMockedPostJobIssue("foo", Severity.BLOCKER, true, "msg");
-        Iterable<PostJobIssue> issues = Arrays.asList(issue1, issue2);
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("failed");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported 2 issues");
-
-        when(reporterBuilder.build(eq(null), any())).thenReturn(reporter);
-
-        Assertions.assertThatThrownBy(() -> commitPublishPostJob.execute(context)).isInstanceOf(MessageException.class).hasMessage("Report status=failed, desc=SonarQube reported 2 issues");
-        Mockito.verify(reporterBuilder).build(eq(null), any());
-        Mockito.verify(commitFacade, never()).createOrUpdateSonarQubeStatus("failed", "SonarQube reported 2 issues");
-    }
-
-    @Test
-    public void testSuccessNotificationExit() {
-        settings.setProperty(GitLabPlugin.GITLAB_STATUS_NOTIFICATION_MODE, StatusNotificationsMode.EXIT_CODE.getMeaning());
-
-        Iterable<PostJobIssue> issues = Collections.emptyList();
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("success");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported no issues");
-
-        when(reporterBuilder.build(eq(null), any())).thenReturn(reporter);
-
-        commitPublishPostJob.execute(context);
-        Mockito.verify(reporterBuilder).build(eq(null), any());
-        Mockito.verify(commitFacade, never()).createOrUpdateSonarQubeStatus("success", "SonarQube reported no issues");
-    }
-
-    @Test
-    public void testFailedNotificationNothing() {
-        settings.setProperty(GitLabPlugin.GITLAB_STATUS_NOTIFICATION_MODE, StatusNotificationsMode.NOTHING.getMeaning());
-
-        PostJobIssue issue1 = Utils.newMockedPostJobIssue("foo:src", Severity.BLOCKER, true, "msg4");
-        PostJobIssue issue2 = Utils.newMockedPostJobIssue("foo", Severity.BLOCKER, true, "msg");
-        Iterable<PostJobIssue> issues = Arrays.asList(issue1, issue2);
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("failed");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported 2 issues");
-
-        when(reporterBuilder.build(eq(null), any())).thenReturn(reporter);
-
-        commitPublishPostJob.execute(context);
-        Mockito.verify(reporterBuilder).build(eq(null), any());
-        Mockito.verify(commitFacade, never()).createOrUpdateSonarQubeStatus("failed", "SonarQube reported 2 issues");
-    }
-
-    @Test
-    public void testSuccessNotificationNothing() {
-        settings.setProperty(GitLabPlugin.GITLAB_STATUS_NOTIFICATION_MODE, StatusNotificationsMode.NOTHING.getMeaning());
-
-        Iterable<PostJobIssue> issues = Collections.emptyList();
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("success");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported no issues");
-
-        when(reporterBuilder.build(eq(null), any())).thenReturn(reporter);
-
-        commitPublishPostJob.execute(context);
-        Mockito.verify(reporterBuilder).build(eq(null), any());
-        Mockito.verify(commitFacade, never()).createOrUpdateSonarQubeStatus("success", "SonarQube reported no issues");
-    }
-
 
     @Test
     public void testUnexpectedExceptionPublish() {
@@ -625,76 +465,5 @@ public class CommitPublishPostJobTest {
         Mockito.verify(sonarFacade).loadQualityGate();
         Mockito.verify(reporterBuilder).build(qualityGate, issues);
         Mockito.verify(commitFacade, never()).createOrUpdateSonarQubeStatus("failed", "SonarQube Condition Error:0 Warning:2 Ok:3 SonarQube reported no issues");
-    }
-
-    @Test
-    public void testFailedWithExceptionWithQualityGageFailSetting() {
-        settings.setProperty(GitLabPlugin.GITLAB_STATUS_NOTIFICATION_MODE, StatusNotificationsMode.NOTHING.getMeaning());
-        settings.setProperty(GitLabPlugin.GITLAB_FAIL_ON_QUALITY_GATE, "true");
-
-        PostJobIssue issue1 = Utils.newMockedPostJobIssue("foo:src", Severity.BLOCKER, true, "msg4");
-        PostJobIssue issue2 = Utils.newMockedPostJobIssue("foo", Severity.BLOCKER, true, "msg");
-        Iterable<PostJobIssue> issues = Arrays.asList(issue1, issue2);
-
-        List<Issue> issuelist = new ArrayList<Issue>();
-
-        QualityGate qualityGate = Mockito.mock(QualityGate.class);
-        when(qualityGate.getStatus()).thenReturn(QualityGate.Status.ERROR);
-        when(sonarFacade.loadQualityGate()).thenReturn(qualityGate);
-        when(sonarFacade.getNewIssues()).thenReturn(issuelist);
-
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("failed");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported 2 issues");
-        when(reporterBuilder.build(qualityGate, issuelist)).thenReturn(reporter);
-
-        Assertions.assertThatThrownBy(() -> commitPublishPostJob.execute(context)).isInstanceOf(MessageException.class).hasMessage("Quality Gate failed. Exiting scan with failure.");
-
-        Mockito.verify(commitFacade, never()).createOrUpdateSonarQubeStatus("failed", "SonarQube reported 2 issues");
-
-    }
-
-    @Test
-    public void testFailedWithoutExceptionWithQualityGageFailSettingAsFalse() {
-        settings.setProperty(GitLabPlugin.GITLAB_STATUS_NOTIFICATION_MODE, StatusNotificationsMode.NOTHING.getMeaning());
-        settings.setProperty(GitLabPlugin.GITLAB_FAIL_ON_QUALITY_GATE, "false");
-
-        PostJobIssue issue1 = Utils.newMockedPostJobIssue("foo:src", Severity.BLOCKER, true, "msg4");
-        PostJobIssue issue2 = Utils.newMockedPostJobIssue("foo", Severity.BLOCKER, true, "msg");
-        Iterable<PostJobIssue> issues = Arrays.asList(issue1, issue2);
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("failed");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported 2 issues");
-
-        when(reporterBuilder.build(eq(null), any())).thenReturn(reporter);
-
-        commitPublishPostJob.execute(context);
-
-        Mockito.verify(reporterBuilder).build(eq(null), any());
-        Mockito.verify(commitFacade, never()).createOrUpdateSonarQubeStatus("failed", "SonarQube reported 2 issues");
-
-    }
-
-    @Test
-    public void testFailedWithoutExceptionWithNoQualityGageFailSetting() {
-        settings.setProperty(GitLabPlugin.GITLAB_STATUS_NOTIFICATION_MODE, StatusNotificationsMode.NOTHING.getMeaning());
-
-        PostJobIssue issue1 = Utils.newMockedPostJobIssue("foo:src", Severity.BLOCKER, true, "msg4");
-        PostJobIssue issue2 = Utils.newMockedPostJobIssue("foo", Severity.BLOCKER, true, "msg");
-        Iterable<PostJobIssue> issues = Arrays.asList(issue1, issue2);
-
-        Reporter reporter = Mockito.mock(Reporter.class);
-        when(reporter.getStatus()).thenReturn("failed");
-        when(reporter.getStatusDescription()).thenReturn("SonarQube reported 2 issues");
-
-        when(reporterBuilder.build(eq(null), any())).thenReturn(reporter);
-
-        commitPublishPostJob.execute(context);
-
-        Mockito.verify(reporterBuilder).build(eq(null), any());
-        Mockito.verify(commitFacade, never()).createOrUpdateSonarQubeStatus("failed", "SonarQube reported 2 issues");
-
     }
 }
