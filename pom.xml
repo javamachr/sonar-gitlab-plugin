@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.talanlabs</groupId>
   <artifactId>sonar-gitlab-plugin</artifactId>
-  <version>5.1.3</version>
+  <version>5.2</version>
   <name>SonarQube :: GitLab Plugin</name>
   <description>GitLab Plugin for Reporting</description>
   <packaging>sonar-plugin</packaging>
@@ -23,7 +23,7 @@
     <license.mailto>gabriel.allaigre@gmail.com</license.mailto>
     <license.owner>Talanlabs</license.owner>
 
-    <sonar.version>9.3.0.51899</sonar.version>
+    <sonar.version>9.5.0.56709</sonar.version>
     <sonar.pluginName>GitLab</sonar.pluginName>
     <sonar.pluginClass>com.talanlabs.sonar.plugins.gitlab.GitLabPlugin</sonar.pluginClass>
 
@@ -137,9 +137,9 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
+      <groupId>org.sonarsource.api.plugin</groupId>
       <artifactId>sonar-plugin-api</artifactId>
-      <version>${sonar.version}</version>
+      <version>9.6.1.114</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

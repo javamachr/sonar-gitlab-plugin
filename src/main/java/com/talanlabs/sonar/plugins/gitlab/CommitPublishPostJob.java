@@ -23,21 +23,15 @@ import com.talanlabs.sonar.plugins.gitlab.models.Issue;
 import com.talanlabs.sonar.plugins.gitlab.models.QualityGate;
 import com.talanlabs.sonar.plugins.gitlab.models.StatusNotificationsMode;
 import org.jetbrains.annotations.NotNull;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.postjob.PostJob;
 import org.sonar.api.batch.postjob.PostJobContext;
 import org.sonar.api.batch.postjob.PostJobDescriptor;
-import org.sonar.api.batch.postjob.issue.PostJobIssue;
 import org.sonar.api.utils.MessageException;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Compute comments to be added on the commit on preview or issue mode only
@@ -124,23 +118,6 @@ public class CommitPublishPostJob implements PostJob {
     private File fileFromProperty(PostJobContext context, String property) {
         String value = context.config().get(property).orElse(null);
         return value != null ? new File(value) : null;
-    }
-
-    private List<Issue> toIssues(Iterable<PostJobIssue> postJobIssues) {
-        if (postJobIssues == null) {
-            return Collections.emptyList();
-        }
-        return StreamSupport.stream(postJobIssues.spliterator(), false).map(this::toIssue).collect(Collectors.toList());
-    }
-
-    private Issue toIssue(PostJobIssue postJobIssue) {
-        File file = null;
-        if (postJobIssue.inputComponent() instanceof InputFile) {
-            InputFile inputFile = (InputFile) Objects.requireNonNull(postJobIssue.inputComponent());
-            file = new File(inputFile.uri());
-        }
-        return Issue.newBuilder().key(postJobIssue.key()).componentKey(postJobIssue.componentKey()).severity(postJobIssue.severity()).ruleKey(postJobIssue.ruleKey().toString())
-                .message(postJobIssue.message()).line(postJobIssue.line()).file(file).newIssue(postJobIssue.isNew()).build();
     }
 
     private void notification(Reporter report) {
