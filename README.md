@@ -7,7 +7,7 @@ Inspired by https://github.com/SonarCommunity/sonar-github
 
 # Current version
 
-## Version 5.2
+## Version 5.2.1
 ** Only SonarQube 9.5+**
 
  * bumped plugin version to 9.5.0.56709
