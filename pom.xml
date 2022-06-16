@@ -16,6 +16,7 @@
   <packaging>sonar-plugin</packaging>
   <url>https://github.com/javamachr/sonar-gitlab-plugin</url>
   <properties>
+    <maven.compiler.release>11</maven.compiler.release>
     <java-gitlab-api.version>1.5.0</java-gitlab-api.version>
     <freemarker.version>2.3.31</freemarker.version>
     <commons-text.version>1.9</commons-text.version>
