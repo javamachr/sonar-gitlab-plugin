@@ -61,6 +61,7 @@ public class GitLabApiV4WrapperTest {
         GitLabPluginConfiguration gitLabPluginConfiguration = mock(GitLabPluginConfiguration.class);
         when(gitLabPluginConfiguration.commitSHA()).thenReturn(Collections.singletonList("1"));
         when(gitLabPluginConfiguration.refName()).thenReturn("master");
+        when(gitLabPluginConfiguration.statusName()).thenReturn("sonarqube-1");
 
         GitLabApiV4Wrapper facade = new GitLabApiV4Wrapper(gitLabPluginConfiguration);
 
@@ -68,7 +69,7 @@ public class GitLabApiV4WrapperTest {
         facade.setGitLabAPI(gitLabAPI);
 
         GitLabAPICommits gitLabAPICommits = mock(GitLabAPICommits.class);
-        when(gitLabAPICommits.postCommitStatus(1, "1", "pending", "master", "sonarqube", "server", "")).thenReturn(null);
+        when(gitLabAPICommits.postCommitStatus(1, "1", "pending", "master", "sonarqube-1", "server", "")).thenReturn(null);
 
         when(gitLabAPI.getGitLabAPICommits()).thenReturn(gitLabAPICommits);
 
@@ -78,7 +79,7 @@ public class GitLabApiV4WrapperTest {
 
         facade.createOrUpdateSonarQubeStatus("pending", "nothing");
 
-        verify(gitLabAPICommits).postCommitStatus(1, "1", "pending", "master", "sonarqube", null, "nothing");
+        verify(gitLabAPICommits).postCommitStatus(1, "1", "pending", "master", "sonarqube-1", null, "nothing");
     }
 
     @Test
@@ -86,6 +87,7 @@ public class GitLabApiV4WrapperTest {
         GitLabPluginConfiguration gitLabPluginConfiguration = mock(GitLabPluginConfiguration.class);
         when(gitLabPluginConfiguration.commitSHA()).thenReturn(Collections.singletonList("1"));
         when(gitLabPluginConfiguration.refName()).thenReturn("master");
+        when(gitLabPluginConfiguration.statusName()).thenReturn("sonarqube-2");
 
         GitLabApiV4Wrapper facade = new GitLabApiV4Wrapper(gitLabPluginConfiguration);
 
@@ -93,7 +95,7 @@ public class GitLabApiV4WrapperTest {
         facade.setGitLabAPI(gitLabAPI);
 
         GitLabAPICommits gitLabAPICommits = mock(GitLabAPICommits.class);
-        when(gitLabAPICommits.postCommitStatus(1, "1", "pending", "master", "sonarqube", null, "nothing")).thenThrow(new IOException());
+        when(gitLabAPICommits.postCommitStatus(1, "1", "pending", "master", "sonarqube-2", null, "nothing")).thenThrow(new IOException());
 
         when(gitLabAPI.getGitLabAPICommits()).thenReturn(gitLabAPICommits);
 

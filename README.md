@@ -350,6 +350,7 @@ https://docs.gitlab.com/ce/ci/variables/#9-0-renaming
 | sonar.gitlab.merge_request_discussion | Allows to post the comments as discussions (default false) | Project, Variable | >= 4.0.0 |
 | sonar.gitlab.ci_merge_request_iid | The IID of the merge request if it’s pipelines for merge requests | Project, Variable | >= 4.0.0 |
 | sonar.gitlab.fail_on_qualitygate | Fail scan if the quality gate fails (default false), this is required to fail the scanner since the plugin requires the `sonar.qualitygate.wait=false` to run | Project, Variable | >= 5.0.2 |
+| sonar.gitlab.status_name | The name of the commit status created by the plugin (default `sonarqube`) | Project, Variable | >= 5.2.2 |
 
 - Administration : **Settings** globals in SonarQube
 - Project : **Settings** of project in SonarQube

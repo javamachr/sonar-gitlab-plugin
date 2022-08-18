@@ -45,8 +45,6 @@ public class GitLabApiV4Wrapper implements IGitLabApiWrapper {
 
     private static final Logger LOG = Loggers.get(GitLabApiV4Wrapper.class);
 
-    private static final String COMMIT_CONTEXT = "sonarqube";
-
     private final GitLabPluginConfiguration config;
     private GitLabAPI gitLabAPIV4;
     private GitLabProject gitLabProject;
@@ -220,7 +218,7 @@ public class GitLabApiV4Wrapper implements IGitLabApiWrapper {
     public void createOrUpdateSonarQubeStatus(String status, String statusDescription) {
         try {
             gitLabAPIV4.getGitLabAPICommits()
-                    .postCommitStatus(gitLabProject.getId(), getFirstCommitSHA(), status, config.refName(), COMMIT_CONTEXT, null, statusDescription);
+                    .postCommitStatus(gitLabProject.getId(), getFirstCommitSHA(), status, config.refName(), config.statusName(), null, statusDescription);
         } catch (IOException e) {
             // Workaround for https://gitlab.com/gitlab-org/gitlab-ce/issues/25807
             if (e.getMessage() != null && e.getMessage().contains("Cannot transition status")) {

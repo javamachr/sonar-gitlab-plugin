@@ -188,6 +188,10 @@ public class GitLabPluginConfigurationTest {
         Assertions.assertThat(config.isMergeRequestDiscussionEnabled()).isFalse();
         settings.setProperty(GitLabPlugin.GITLAB_MERGE_REQUEST_DISCUSSION, "true");
         Assertions.assertThat(config.isMergeRequestDiscussionEnabled()).isTrue();
+
+        Assertions.assertThat(config.statusName()).isEqualTo("sonarqube");
+        settings.setProperty(GitLabPlugin.GITLAB_STATUS_NAME, "sonar-analysis-1");
+        Assertions.assertThat(config.statusName()).isEqualTo("sonar-analysis-1");
     }
 
     @Test
