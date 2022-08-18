@@ -284,4 +284,8 @@ public class GitLabPluginConfiguration {
         return configuration.getBoolean(GitLabPlugin.GITLAB_FAIL_ON_QUALITY_GATE).orElse(false);
     }
 
+    public String statusName()  {
+        return configuration.get(GitLabPlugin.GITLAB_STATUS_NAME).orElse("sonarqube");
+    }
+
 }

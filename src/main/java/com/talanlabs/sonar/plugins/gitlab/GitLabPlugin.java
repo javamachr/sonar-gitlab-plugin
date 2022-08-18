@@ -70,6 +70,7 @@ public class GitLabPlugin implements Plugin {
     public static final String GITLAB_CI_MERGE_REQUEST_IID = "sonar.gitlab.ci_merge_request_iid";
     public static final String SONAR_PULL_REQUEST_KEY = "sonar.pullrequest.key";
     public static final String GITLAB_FAIL_ON_QUALITY_GATE = "sonar.gitlab.fail_on_qualitygate";
+    public static final String GITLAB_STATUS_NAME = "sonar.gitlab.status_name";
 
     public static final String CATEGORY = "gitlab";
     public static final String SUBCATEGORY = "reporting";
@@ -171,7 +172,11 @@ public class GitLabPlugin implements Plugin {
                         PropertyDefinition.builder(GITLAB_FAIL_ON_QUALITY_GATE).name("Quality Gate fail").description("Fail the scan process based on quality gate error status")
                                 .category(CATEGORY).subCategory(SUBCATEGORY).type(PropertyType.BOOLEAN)
                                 .defaultValue(String.valueOf(false))
-                                .index(36).build()
+                                .index(36).build(),
+                        PropertyDefinition.builder(GITLAB_STATUS_NAME).name("GitLab status name").description("The name of the commit status created by the plugin.")
+                                .category(CATEGORY).subCategory(SUBCATEGORY)
+                                .defaultValue("sonarqube")
+                                .index(37).hidden().build()
 
                 );
     }
