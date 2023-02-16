@@ -7,6 +7,12 @@ Inspired by https://github.com/SonarCommunity/sonar-github
 
 # Current version
 ## Version 5.3.0
+** Only SonarQube 9.9+ **
+
+* bumped plugin api version to 9.14.0.375
+* bumped plugin api impl version to 9.9.0.65466
+
+## Version 5.3.0
 
  * Merged [Make the GitLab status name configurable](https://github.com/javamachr/sonar-gitlab-plugin/pull/31)
  * 

@@ -385,7 +385,7 @@ public class SonarFacadeTest {
     private void testNotEmpty2GetNewIssueForQualifier(String qualifier) throws IOException {
         Issues.SearchWsResponse searchWsResponse = Issues.SearchWsResponse.newBuilder().setTotal(1).setPs(10).addIssues(
                 Issues.Issue.newBuilder().setKey("123").setComponent("moi:ici:toto.java").setRule("squid:123").setLine(10).setMessage("Error here").setSeverity(Common.Severity.BLOCKER)
-                        .setProject("moi").setSubProject("moi:ici").build()).addComponents(Issues.Component.newBuilder().setKey("moi:ici:toto.java").setQualifier(qualifier).setPath("toto.java").build())
+                        .setProject("moi").build()).addComponents(Issues.Component.newBuilder().setKey("moi:ici:toto.java").setQualifier(qualifier).setPath("toto.java").build())
                 .build();
         sonar.enqueue(new MockResponse().setResponseCode(200).addHeader("Content-Type", "application/x-protobuf").setBody(toBuffer(searchWsResponse)));
 
