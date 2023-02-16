@@ -6,7 +6,7 @@ Sonar GitLab Plugin
 Inspired by https://github.com/SonarCommunity/sonar-github
 
 # Current version
-## Version 5.3.0
+## Version 5.4.0
 ** Only SonarQube 9.9+ **
 
 * bumped plugin api version to 9.14.0.375
